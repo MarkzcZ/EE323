@@ -1,5 +1,5 @@
 fs = 44100;
-rhythm = 0.25;
+rhythm = 0.5;
 s = [];
 a = gen_wave(6, 'D', 0,0, rhythm*0.5);
 s = [s a];

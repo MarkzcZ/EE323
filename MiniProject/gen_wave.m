@@ -7,6 +7,7 @@ freq = tone2freq(tone, scale, noctave, rising);%计算音的频率
 
 x=linspace(0,2*pi*rhythm,rhythm*fs);%增加时值
 
-waves=sin(freq.*x);%输出包络sin波
+y=0.7*sin(freq.*x)+0.2*sin(2.*freq.*x)+0.1*sin(3.*freq.*x);%输出包络sin波
+waves = y.*exp(-x/rhythm);%音的自然延长
 
 end

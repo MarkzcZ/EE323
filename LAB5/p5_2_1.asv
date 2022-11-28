@@ -1,8 +1,0 @@
-x1 = hamming(20);
-
-figure(1)
-stem(0:19,abs(DFTsum(x1))),xlabel('n'),ylabel('abs(IDFTsum(r1))'),title('magnitude plot for IDFT(r1)')
-
-[X,w] = DTFTsamples(x1);
-figure(2)
-plot(X,w)

@@ -131,9 +131,13 @@ Name: 占陈郅
   N = length(x);  
   x0 = x(1:2:N);  % Even part of x[n]
   x1 = x(2:2:N);  % Odd part of x[n]
-  X0 = DFTsum(x0); X0 =[X0 X0];
-  X1 = DFTsum(x1); X1 = [X1 X1];
-  X = X0+ exp(-1j*2*pi/N*[0:1:N-1]).*X1;% equation5.13, using twiddle factior.
+  X0 = DFTsum(x0); 
+  X0 =[X0 X0];%odd and even part are both used twice.
+  X1 = DFTsum(x1); 
+  X1 = [X1 X1];
+  %if k = [0:N-1], with the equation 5.12, the result can be expressed in one equation.
+  k = [0:1:N-1];
+  X = X0+ exp(-1j*2*pi/N*k).*X1;% X[k] = X0[k] + W*X1[k] equation5.13&5.12, using twiddle factior.
   end
   ```
 
@@ -163,8 +167,10 @@ Name: 占陈郅
 
   Analysis:
 
-  The figure above shows dcDFT is as good as DFTsum.
+  In the dcDFT.m, if k = [0:N/2-1], as shown in equation 5.13, the results need two equations to express, but if k = [0:N-1], with the equation 5.12 we know -W can change to +W by k = k+N/2 in phase, 0 to N/2-1 and N/2 to N-1 can be **both** expressed by X[k] = X~0~[k] + W~N~^k^X1[k]. The result can be expressed in one equation as shown in the code.
 
+  The figure above shows dcDFT is as good as DFTsum.
+  
   The number of multiplies that are required in this approach to computing an N point DFT is 
   $$
   N + 2 × (\frac{N}2)^2=N+\frac{N^2}2
@@ -267,15 +273,15 @@ Name: 占陈郅
   ```matlab
   function X = fft_stage(x)
   N = length(x);  % Determine the length of the input signal.
-  if N == 2 % If N=2, then the function should just compute the 2-pt DFT as in (5.14), and then return.
+  if N == 2
       X(1) = x(1)+x(2);
       X(2) = x(1)-x(2);
-  else %  If N>2, then the function should perform the FFT steps described previously (i.e. decimate, compute (N/2)-point DFTs, re-combine), calling fft_stage to compute the (N/2)-point DFTs
+  else
       r = 0:1:N/2-1;
       xeven = x(1:2:N);
       xodd = x(2:2:N);
       X0 = fft_stage(xeven);
-      X1 = fft_stage(xodd);
+      X1 = fft_stage(xodd);% the same method as dcDFT
       temp = X1.*exp(-j*2*pi/N*r);
       X = [X0+temp X0-temp]; 
   end

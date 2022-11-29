@@ -253,6 +253,8 @@ Name: 占陈郅
 
 - Calculate the total number of multiplies **by twiddle factors**.
 
+  When N is the power of 2, N = 2^v^, it requires  v = log~2~N stages of computation. The number of  complex multiplications and additions required is  therefore Nv = Nlog~2~N.
+
   For 8-point FFT.
   $$
   \frac{8}2×log_28=12
@@ -261,10 +263,7 @@ Name: 占陈郅
   $$
   \frac{N}2×log_2N = p2^{p-1}
   $$
-  The number of multiplications could be even lower if we consider W~N~^0^ = 1 and W~N~^N/2^ = -1 in Strategy2. In brief
-  $$
-  \frac{N}2×(log_2N-2)+1
-  $$
+  
 
 - Write a recursive function X=fft_stage(x) that performs one stage of the FFT algorithm for a  power-of-2 length signal.
 
